@@ -22,8 +22,13 @@ check_env_backup() {
 
     # Get NAS .env via SSH
     # Use timeout to prevent hanging if SSH stalls
+    # Requires NAS_SSH_PASS env var or SSH key auth
     local nas_env
-    nas_env=$(timeout 10 sshpass -p '***REDACTED***' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
+    if [[ -n "$NAS_SSH_PASS" ]] && command -v sshpass &>/dev/null; then
+        nas_env=$(timeout 10 sshpass -p "$NAS_SSH_PASS" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
+    else
+        nas_env=$(timeout 10 ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 -o BatchMode=yes admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
+    fi
 
     # Skip if SSH failed or timed out
     if [[ -z "$nas_env" ]]; then

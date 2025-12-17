@@ -35,12 +35,18 @@ check_uptime_monitors() {
 
     # Get actual monitors from Uptime Kuma
     # Use timeout to prevent hanging if SSH or docker exec stalls
+    # Requires NAS_SSH_PASS env var or SSH key auth
     local actual
-    actual=$(timeout 15 sshpass -p '***REDACTED***' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 "$nas_user@$nas_host" \
-        "docker exec uptime-kuma sqlite3 /app/data/kuma.db \"SELECT name FROM monitor ORDER BY name;\"" 2>/dev/null)
+    if [[ -n "$NAS_SSH_PASS" ]] && command -v sshpass &>/dev/null; then
+        actual=$(timeout 15 sshpass -p "$NAS_SSH_PASS" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 "$nas_user@$nas_host" \
+            "docker exec uptime-kuma sqlite3 /app/data/kuma.db \"SELECT name FROM monitor ORDER BY name;\"" 2>/dev/null)
+    else
+        actual=$(timeout 15 ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 -o BatchMode=yes "$nas_user@$nas_host" \
+            "docker exec uptime-kuma sqlite3 /app/data/kuma.db \"SELECT name FROM monitor ORDER BY name;\"" 2>/dev/null)
+    fi
 
     if [[ -z "$actual" ]]; then
-        echo "    SKIP: Could not query Uptime Kuma (SSH failed or timed out)"
+        echo "    SKIP: Could not query Uptime Kuma (set NAS_SSH_PASS or use SSH keys)"
         return 0
     fi
 

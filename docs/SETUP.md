@@ -5,7 +5,7 @@ Complete setup guide for the media automation stack. Works on any Docker host wi
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Step 1: Clone Repository and Create Directories](#step-1-clone-repository-and-create-directories)
+- [Step 1: Create Directories and Clone Repository](#step-1-create-directories-and-clone-repository)
 - [Step 2: Configure Environment](#step-2-configure-environment)
 - [Step 3: External Access (Optional)](#step-3-external-access-optional)
 - [Step 4: Deploy Services](#step-4-deploy-services)
@@ -43,14 +43,14 @@ Complete setup guide for the media automation stack. Works on any Docker host wi
 
 ---
 
-## Step 1: Clone Repository and Create Directories
+## Step 1: Create Directories and Clone Repository
 
-Clone this repository to your Docker host and create media folders.
+Create media folders and clone this repository to your Docker host.
 
 <details>
 <summary><strong>Ugreen NAS (UGOS)</strong></summary>
 
-**Important:** Folders created via SSH don't appear in UGOS Files app. Create top-level folders via GUI for visibility.
+Folders created via SSH don't appear in UGOS Files app. Create top-level folders via GUI for visibility.
 
 1. Open UGOS web interface → **Files** app
 2. Create shared folders: **Media**, **docker**
@@ -169,27 +169,32 @@ Gluetun supports 30+ VPN providers. Configuration varies by provider.
 <details>
 <summary><strong>Surfshark (WireGuard)</strong></summary>
 
-1. Go to: https://my.surfshark.com/ → VPN → Manual Setup → Router → WireGuard
-2. Select "I don't have a key pair" to generate new keys
-3. **Select a server location** (e.g., "United Kingdom")
-   - You MUST select a location before the Download button appears
-4. Click **Download** to get the `.conf` file
-5. Open the file and extract:
+| Step | Screenshot |
+|------|------------|
+| 1. Go to [my.surfshark.com](https://my.surfshark.com/) → VPN → Manual Setup → Router → WireGuard | <img src="images/Surfshark/1.png" width="300"> |
+| 2. Select **"I don't have a key pair"** | <img src="images/Surfshark/2.png" width="300"> |
+| 3. Under Credentials, enter a name (e.g., `ugreen-nas`) | <img src="images/Surfshark/3.png" width="300"> |
+| 4. Click **"Generate a new key pair"** and copy both keys to your notes | <img src="images/Surfshark/4.png" width="300"> |
+| 5. Click **"Choose location"** and select a server (e.g., United Kingdom) | <img src="images/Surfshark/5.png" width="300"> |
+| 6. Click the **Download** arrow to get the `.conf` file | <img src="images/Surfshark/6.png" width="300"> |
+
+7. Open the downloaded `.conf` file and note the `Address` value:
    ```ini
    [Interface]
    Address = 10.14.0.2/16          ← Copy this
-   PrivateKey = uHSC4GWQ...        ← Copy this
+   PrivateKey = (already copied)
    ```
-6. Add to `.env`:
+
+8. Add to `.env`:
    ```bash
    VPN_SERVICE_PROVIDER=surfshark
    VPN_TYPE=wireguard
    WIREGUARD_PRIVATE_KEY=your_private_key_here
    WIREGUARD_ADDRESSES=10.14.0.2/16
-   SERVER_COUNTRIES=United Kingdom
+   VPN_COUNTRIES=United Kingdom
    ```
 
-**Note:** You MUST download the config file - the Address field isn't shown on the web interface.
+> **Note:** `VPN_COUNTRIES` in your `.env` maps to Gluetun's `SERVER_COUNTRIES` variable internally. We use the clearer name in `.env`.
 
 </details>
 

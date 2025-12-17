@@ -15,22 +15,23 @@ check_env_backup() {
     fi
 
     # Try to reach NAS (quick timeout)
-    if ! ping -c 1 -W 1 yournas.local &>/dev/null && ! ping -c 1 -W 1 192.168.1.100 &>/dev/null; then
+    if ! timeout 2 ping -c 1 yournas.local &>/dev/null && ! timeout 2 ping -c 1 192.168.1.100 &>/dev/null; then
         echo "    SKIP: NAS not reachable"
         return 0
     fi
 
     # Get NAS .env via SSH (requires sshpass or key auth)
+    # Use timeout to prevent hanging if SSH stalls
     local nas_env
     if command -v sshpass &>/dev/null && [[ -n "$NAS_SSH_PASS" ]]; then
-        nas_env=$(sshpass -p "$NAS_SSH_PASS" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
+        nas_env=$(timeout 10 sshpass -p "$NAS_SSH_PASS" ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
     else
-        nas_env=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 -o BatchMode=yes admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
+        nas_env=$(timeout 10 ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 -o BatchMode=yes admin@yournas.local "cat /volume1/docker/arr-stack/.env" 2>/dev/null)
     fi
 
-    # Skip if SSH failed
+    # Skip if SSH failed or timed out
     if [[ -z "$nas_env" ]]; then
-        echo "    SKIP: Could not fetch NAS .env (SSH auth required)"
+        echo "    SKIP: Could not fetch NAS .env (SSH failed or timed out)"
         return 0
     fi
 

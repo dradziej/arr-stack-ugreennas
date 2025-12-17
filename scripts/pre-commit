@@ -35,6 +35,7 @@ source "$SCRIPT_DIR/lib/check-yaml-syntax.sh"
 source "$SCRIPT_DIR/lib/check-conflicts.sh"
 source "$SCRIPT_DIR/lib/check-compose-drift.sh"
 source "$SCRIPT_DIR/lib/check-hardcoded-domain.sh"
+source "$SCRIPT_DIR/lib/check-env-backup.sh"
 
 # Track results
 ERRORS=0
@@ -111,6 +112,13 @@ echo ""
 # ==========================================
 echo -e "${BLUE}6. Checking for hardcoded domain...${NC}"
 check_hardcoded_domain
+echo ""
+
+# ==========================================
+# CHECK 7: NAS .env Backup Sync (WARNS)
+# ==========================================
+echo -e "${BLUE}7. Checking .env.nas.backup sync...${NC}"
+check_env_backup
 echo ""
 
 # ==========================================

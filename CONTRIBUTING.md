@@ -108,6 +108,7 @@ This repo includes validation hooks that run on `git commit`:
 | Port/IP conflicts | Yes | Detects duplicate ports or static IPs |
 | Compose drift | Warn | Flags Jellyfin/Plex inconsistencies |
 | Hardcoded domain | Warn | Flags your domain in tracked files |
+| NAS .env backup | Warn | Checks `.env.nas.backup` matches NAS (if reachable) |
 
 ### Install
 
@@ -146,5 +147,6 @@ scripts/
     ├── check-yaml-syntax.sh
     ├── check-conflicts.sh
     ├── check-compose-drift.sh
-    └── check-hardcoded-domain.sh
+    ├── check-hardcoded-domain.sh
+    └── check-env-backup.sh
 ```

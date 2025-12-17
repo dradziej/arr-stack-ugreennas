@@ -51,19 +51,6 @@ x-logging: &default-logging
 #########################
 services:
   #############################################
-  # VPN Health Monitor (deunhealth)          #
-  #############################################
-  deunhealth:
-    image: qmcgaw/deunhealth
-    container_name: deunhealth
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - TZ=${TZ:-Europe/London}
-    restart: unless-stopped
-    logging: *default-logging
-
-  #############################################
   # VPN Gateway (Gluetun with Surfshark)    #
   #############################################
   gluetun:
@@ -403,30 +390,3 @@ services:
       timeout: 10s
       retries: 2
 
-  #############################################
-  # Monitoring (Uptime Kuma)                 #
-  #############################################
-  uptime-kuma:
-    image: louislam/uptime-kuma:2
-    container_name: uptime-kuma
-    restart: unless-stopped
-    ports:
-      - "3001:3001"  # Local network access
-    environment:
-      - TZ=${TZ:-Europe/London}
-    networks:
-      traefik-proxy:
-        ipv4_address: 192.168.100.13
-    volumes:
-      - /volume1/docker/arr-stack/uptime-kuma:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-proxy"
-    logging: *default-logging
-    healthcheck:
-      test: ["CMD-SHELL", "node /app/extra/healthcheck.js"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
-      start_period: 30s

@@ -16,10 +16,10 @@ check_compose_drift() {
         return 0
     fi
 
-    # Count services (excluding comments, looking for service definitions)
+    # Count actual services (only entries under the services: block)
     local jellyfin_services plex_services
-    jellyfin_services=$(grep -cE '^  [a-z][a-z0-9_-]*:\s*$' "$jellyfin_file" 2>/dev/null || echo 0)
-    plex_services=$(grep -cE '^  [a-z][a-z0-9_-]*:\s*$' "$plex_file" 2>/dev/null || echo 0)
+    jellyfin_services=$(awk '/^services:/{found=1; next} /^[a-z]/{found=0} found && /^  [a-z][a-z0-9_-]*:/{count++} END{print count+0}' "$jellyfin_file")
+    plex_services=$(awk '/^services:/{found=1; next} /^[a-z]/{found=0} found && /^  [a-z][a-z0-9_-]*:/{count++} END{print count+0}' "$plex_file")
 
     if [[ "$jellyfin_services" != "$plex_services" ]]; then
         echo "    WARNING: Service count differs - Jellyfin: $jellyfin_services, Plex: $plex_services"
@@ -31,9 +31,9 @@ check_compose_drift() {
 
     for service in "${common_services[@]}"; do
         # Check if service exists in both
-        local in_jellyfin in_plex
-        in_jellyfin=$(grep -c "^  $service:" "$jellyfin_file" 2>/dev/null || echo 0)
-        in_plex=$(grep -c "^  $service:" "$plex_file" 2>/dev/null || echo 0)
+        local in_jellyfin=0 in_plex=0
+        in_jellyfin=$(grep -c "^  $service:" "$jellyfin_file" 2>/dev/null) || in_jellyfin=0
+        in_plex=$(grep -c "^  $service:" "$plex_file" 2>/dev/null) || in_plex=0
 
         if [[ "$in_jellyfin" -gt 0 && "$in_plex" -eq 0 ]]; then
             echo "    WARNING: Service '$service' exists in Jellyfin but not Plex"

@@ -1,29 +1,15 @@
+# Traefik routing for media stack services
+#
+# REMOTE ACCESS (via Cloudflare Tunnel):
+# - Jellyfin, Jellyseerr, WireGuard - user-facing services
+#
+# LOCAL-ONLY (access via NAS_IP:PORT or WireGuard VPN):
+# - Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Pi-hole
+# - These have weak default auth ("Disabled for Local" / "Bypass localhost")
+# - Use Jellyseerr for remote media requests instead
+
 http:
   routers:
-    sonarr:
-      rule: "Host(`sonarr.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: sonarr
-
-    radarr:
-      rule: "Host(`radarr.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: radarr
-
-    qbittorrent:
-      rule: "Host(`qbit.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: qbittorrent
-
-    prowlarr:
-      rule: "Host(`prowlarr.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: prowlarr
-
     jellyfin:
       rule: "Host(`jellyfin.yourdomain.com`)"
       entryPoints:
@@ -36,49 +22,13 @@ http:
         - web
       service: jellyseerr
 
-    bazarr:
-      rule: "Host(`bazarr.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: bazarr
-
-    pihole:
-      rule: "Host(`pihole.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: pihole
-
     wg:
       rule: "Host(`wg.yourdomain.com`)"
       entryPoints:
         - web
       service: wg
 
-    # NOTE: traefik-dashboard is configured via docker-compose.traefik.yml labels
-    # NOTE: uptime-kuma and duc routing moved to utilities.yml
-    # (using ${TRAEFIK_DASHBOARD_AUTH} env var for auth - not possible in dynamic configs)
-
   services:
-    sonarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.3:8989"
-
-    radarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.3:7878"
-
-    qbittorrent:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.3:8085"
-
-    prowlarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.3:9696"
-
     jellyfin:
       loadBalancer:
         servers:
@@ -88,16 +38,6 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.100.8:5055"
-
-    bazarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.9:6767"
-
-    pihole:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.5:80"
 
     wg:
       loadBalancer:

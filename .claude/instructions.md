@@ -18,13 +18,30 @@ Forbidden in tracked files: API keys, passwords, tokens, private keys, public IP
 
 ## File Locations
 
-| Location | Purpose | Sync to NAS? |
-|----------|---------|--------------|
-| Git repo | Source of truth | N/A |
-| NAS `/volume1/docker/arr-stack/` | Deployment | Only operational files |
+| Location | Purpose |
+|----------|---------|
+| Git repo (local) | Development |
+| Git repo (NAS: `/volume1/docker/arr-stack/`) | Deployment via `git pull` |
 
-**Sync to NAS**: `docker-compose.*.yml`, `traefik/`, `.env`, `scripts/`
-**Never sync**: `docs/`, `README.md`, `.env.example`, `.gitignore`
+**Deployed via git**: `docker-compose.*.yml`, `traefik/`, `scripts/`, `.claude/instructions.md`
+**Gitignored but required on NAS**: `.env` (manual setup), app data directories
+**Not needed on NAS**: `docs/`, `.env.example` (but git pull includes them, harmless)
+
+## Deployment Workflow
+
+**The NAS has a git clone of this repo. Deploy via git, not file copy.**
+
+```bash
+# 1. Commit and push locally
+git add -A && git commit -m "..." && git push
+
+# 2. Pull on NAS
+ssh <user>@<nas-host> "cd /volume1/docker/arr-stack && git pull"
+
+# 3. Restart affected services
+ssh <user>@<nas-host> "docker restart traefik"  # For routing changes
+ssh <user>@<nas-host> "cd /volume1/docker/arr-stack && docker compose -f docker-compose.arr-stack.yml up -d"  # For compose changes
+```
 
 ## NAS Access
 
@@ -37,7 +54,7 @@ Forbidden in tracked files: API keys, passwords, tokens, private keys, public IP
 echo 'PASS' | sudo -S usermod -aG docker <user>
 # Requires new SSH session to take effect
 
-# SCP doesn't work on UGOS. Use stdin redirect:
+# SCP doesn't work on UGOS. Use stdin redirect (for rare cases):
 sshpass -p 'PASS' ssh <user>@<nas-host> "cat > /path/file" < localfile
 
 # If sudo is needed, pipe password:
@@ -65,6 +82,12 @@ VPN services (Sonarr, Radarr, Prowlarr, qBittorrent) use `network_mode: service:
 Routes defined in `traefik/dynamic/vpn-services.yml`, NOT Docker labels.
 
 Docker labels are minimal (`traefik.enable=true`, `traefik.docker.network=traefik-proxy`). To add routes, edit `vpn-services.yml`.
+
+**Remote vs Local-only services:**
+- **Remote** (via Cloudflare Tunnel): Jellyfin, Jellyseerr, WireGuard, Traefik dashboard
+- **Local-only** (NAS_IP:PORT or via WireGuard): Sonarr, Radarr, Prowlarr, qBittorrent, Bazarr, Pi-hole, Uptime Kuma, duc
+
+Why local-only? These services default to "no login from local network". Cloudflare Tunnel traffic appears local, bypassing auth. Use Jellyseerr for remote media requests.
 
 ## Cloudflare Tunnel
 

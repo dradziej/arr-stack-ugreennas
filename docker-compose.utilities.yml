@@ -55,23 +55,22 @@ services:
   #############################################
   # Monitoring (Uptime Kuma)                 #
   #############################################
+  # Local-only access: http://NAS_IP:3001
+  # Remote access: Connect via WireGuard VPN first
   uptime-kuma:
     image: louislam/uptime-kuma:2
     container_name: uptime-kuma
     restart: unless-stopped
     ports:
-      - "3001:3001"  # Local network access
+      - "3001:3001"  # Local network access only
     environment:
       - TZ=${TZ:-Europe/London}
     networks:
       traefik-proxy:
-        ipv4_address: 192.168.100.13
+        ipv4_address: 192.168.100.13  # For monitoring other containers
     volumes:
       - /volume1/docker/arr-stack/uptime-kuma:/app/data
       - /var/run/docker.sock:/var/run/docker.sock:ro  # For Docker container monitoring
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-proxy"
     logging: *default-logging
     healthcheck:
       test: ["CMD-SHELL", "node /app/extra/healthcheck.js"]
@@ -84,8 +83,11 @@ services:
   # Disk Usage Analyzer (duc)                #
   #############################################
   # Visual disk usage analyzer with treemap UI (like DaisyDisk).
-  # Re-indexes daily at midnight. Access at http://NAS_IP:8838
-  # Manual re-index: docker restart duc
+  # Re-indexes daily at 4am. Manual re-index: docker restart duc
+  #
+  # SECURITY: No authentication - local-only access
+  # Local access: http://NAS_IP:8838
+  # Remote access: Connect via WireGuard VPN first
   duc:
     image: mkoestler/duc-service:latest
     container_name: duc
@@ -93,15 +95,9 @@ services:
       - /volume1:/scan/volume1:ro      # NAS data (read-only)
       - duc-index:/database            # Persistent index
     ports:
-      - "8838:80"                      # Web UI
+      - "8838:80"                      # Local network access only
     environment:
       - TZ=${TZ:-Europe/London}
       - SCHEDULE=0 4 * * *             # Re-index daily at 4am
-    networks:
-      traefik-proxy:
-        ipv4_address: 192.168.100.14
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-proxy"
     restart: unless-stopped
     logging: *default-logging

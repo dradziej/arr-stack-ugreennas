@@ -59,31 +59,42 @@ Ask Claude to help deploy the stack - it reads the [`.claude/instructions.md`](.
 
 ### `docker-compose.arr-stack.yml` - Media Stack
 
+**Remote access** (via Cloudflare Tunnel):
+
 | Service | Description | Local Port | Domain URL |
 |---------|-------------|------------|------------|
-| **Gluetun** | VPN gateway for network privacy | - | Internal |
-| **qBittorrent** | BitTorrent client (VueTorrent UI included) | 8085 | qbit.yourdomain.com |
-| **Sonarr** | TV show library management | 8989 | sonarr.yourdomain.com |
-| **Radarr** | Movie library management | 7878 | radarr.yourdomain.com |
-| **Prowlarr** | Search aggregator | 9696 | prowlarr.yourdomain.com |
-| **Bazarr** | Subtitle management | 6767 | bazarr.yourdomain.com |
 | **Jellyfin** | Media streaming server | 8096 | jellyfin.yourdomain.com |
 | **Jellyseerr** | Media request system | 5055 | jellyseerr.yourdomain.com |
-| **Pi-hole** | DNS + Ad-blocking | 53, 80 | pihole.yourdomain.com |
 | **WireGuard** | VPN server for remote access | 51820/udp | wg.yourdomain.com |
-| **FlareSolverr** | CAPTCHA solver | 8191 | Internal |
 
+**Local-only** (access via NAS_IP:PORT or WireGuard VPN):
+
+| Service | Description | Local Port |
+|---------|-------------|------------|
+| **Gluetun** | VPN gateway for network privacy | - |
+| **qBittorrent** | BitTorrent client (VueTorrent UI) | 8085 |
+| **Sonarr** | TV show library management | 8989 |
+| **Radarr** | Movie library management | 7878 |
+| **Prowlarr** | Search aggregator | 9696 |
+| **Bazarr** | Subtitle management | 6767 |
+| **Pi-hole** | DNS + Ad-blocking | 53, 80 |
+| **FlareSolverr** | CAPTCHA solver | 8191 |
+
+> **Why local-only?** These services default to "no login required from local network". Cloudflare Tunnel traffic appears as local, bypassing auth entirely. Use Jellyseerr for remote media requests. For remote admin access, connect via WireGuard first.
+>
 > **Don't need all these?** Remove any service by deleting its section from the compose file. Core dependency: Gluetun (VPN gateway).
 >
 > **Prefer Plex?** See `docker-compose.plex-arr-stack.yml` for an untested Plex/Overseerr variant.
 
 ### `docker-compose.utilities.yml` - Optional Utilities
 
-| Service | Description | Local Port | Domain URL |
-|---------|-------------|------------|------------|
+| Service | Description | Local Access | Remote Access |
+|---------|-------------|--------------|---------------|
 | **deunhealth** | Auto-restart services if VPN drops and recovers | - | Internal |
-| **Uptime Kuma** | Service monitoring dashboard | 3001 | uptime.yourdomain.com |
-| **duc** | Disk usage analyzer (treemap UI) | 8838 | duc.yourdomain.com |
+| **Uptime Kuma** | Service monitoring dashboard | http://NAS_IP:3001 | Via WireGuard |
+| **duc** | Disk usage analyzer (treemap UI) | http://NAS_IP:8838 | Via WireGuard |
+
+> **Security note:** Utilities are local-only by default. duc has no authentication and exposes filesystem structure. Uptime Kuma exposes infrastructure details. Access remotely via WireGuard VPN.
 
 ## Deployment Options
 

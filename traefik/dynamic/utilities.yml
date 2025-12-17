@@ -1,27 +1,8 @@
 # Traefik routing for optional utilities
-# Update domain to match your setup
-
-http:
-  routers:
-    uptime:
-      rule: "Host(`uptime.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: uptime
-
-    duc:
-      rule: "Host(`duc.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: duc
-
-  services:
-    uptime:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.13:3001"
-
-    duc:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.100.14:80"
+#
+# NOTE: Most utilities are local-only (no Traefik routing) for security:
+# - duc: No auth, exposes filesystem structure → http://NAS_IP:8838
+# - uptime-kuma: Exposes infrastructure details → http://NAS_IP:3001
+#
+# Access these via local network or WireGuard VPN.
+# Add routers here only for services that genuinely need remote access.

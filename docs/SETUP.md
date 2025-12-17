@@ -266,26 +266,35 @@ Cloudflare Tunnel connects outbound from your server, bypassing port forwarding 
 
 | Step | Screenshot |
 |------|------------|
-| 1. Go to [one.dash.cloudflare.com](https://one.dash.cloudflare.com/) | <img src="images/Cloudflare tunnel/1.png" width="500"> |
-| 2. Networks → Overview → **Manage Tunnels** | <img src="images/Cloudflare tunnel/2.png" width="500"> |
-| 3. Click **Add a tunnel** | <img src="images/Cloudflare tunnel/3.png" width="500"> |
-| 4. Name your tunnel (e.g., `Ugreen NAS`) → **Save** | <img src="images/Cloudflare tunnel/4.png" width="500"> |
-| 5. Choose **Docker**, copy the command containing your token | <img src="images/Cloudflare tunnel/5.png" width="500"> |
+| 1. Go to [one.dash.cloudflare.com](https://one.dash.cloudflare.com/) | |
+| 2. Networks → Overview → **Manage Tunnels** | <img src="images/Cloudflare tunnel/1.png" width="500"> |
+| 3. Click **Add a tunnel** | <img src="images/Cloudflare tunnel/2.png" width="500"> |
+| 4. Name your tunnel (e.g., `Ugreen NAS`) → **Save** | <img src="images/Cloudflare tunnel/3.png" width="500"> |
+| 5. Choose **Docker**, copy the command containing your token | <img src="images/Cloudflare tunnel/4.png" width="500"> |
+| 6. Copy the token from the command | <img src="images/Cloudflare tunnel/5.png" width="500"> |
 
-6. Extract the token from the command (the long string after `--token`) and add to `.env`:
+7. Add the token to `.env`:
    ```bash
    TUNNEL_TOKEN=your_tunnel_token_here
    ```
 
-7. **Set up Published application routes** in Cloudflare. All subdomains point to Traefik, which handles routing:
+8. **Set up Published application routes** in Cloudflare. All routes point to Traefik, which handles routing:
    | Subdomain | Service | URL |
    |-----------|---------|-----|
+   | (root domain) | HTTP | traefik:80 |
    | jellyfin | HTTP | traefik:80 |
+   | jellyseerr | HTTP | traefik:80 |
    | sonarr | HTTP | traefik:80 |
    | radarr | HTTP | traefik:80 |
-   | (all others) | HTTP | traefik:80 |
+   | prowlarr | HTTP | traefik:80 |
+   | qbit | HTTP | traefik:80 |
+   | bazarr | HTTP | traefik:80 |
+   | pihole | HTTP | traefik:80 |
+   | wg | HTTP | traefik:80 |
+   | traefik | HTTP | traefik:80 |
+   | uptime | HTTP | traefik:80 |
 
-8. **Deploy** (see Step 4)
+9. **Deploy** (see Step 4)
 
 ### Option B: Port Forwarding + DNS
 

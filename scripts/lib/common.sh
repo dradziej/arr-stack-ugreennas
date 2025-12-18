@@ -169,12 +169,14 @@ is_nas_reachable() {
     [[ -n "$nas_host" ]] && ping -c 1 -W 1 "$nas_host" &>/dev/null
 }
 
-# Check if SSH port is open on NAS
+# Check if SSH port is open on NAS (with 2-second timeout)
 # Returns: 0 if open, 1 if not
 is_ssh_available() {
     local nas_host
     nas_host=$(get_nas_host)
-    [[ -n "$nas_host" ]] && (exec 3<>/dev/tcp/"$nas_host"/22) 2>/dev/null
+    [[ -z "$nas_host" ]] && return 1
+    # Use timeout to prevent hanging on slow/blocked connections
+    timeout 2 bash -c "exec 3<>/dev/tcp/$nas_host/22" 2>/dev/null
 }
 
 # Run SSH command on NAS

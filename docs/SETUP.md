@@ -502,23 +502,7 @@ Skip this if you only want torrents. SABnzbd provides Usenet downloads as an alt
 
 3. **Get API Key:** After wizard, go to Config (⚙️) → General → Copy **API Key**
 
-4. **Create Categories:** Config (⚙️) → Categories → Add each:
-   - `sonarr` (for TV shows)
-   - `radarr` (for movies)
-
-   > ⚠️ Categories must exist in SABnzbd **before** adding it as a download client in Sonarr/Radarr, or the connection test will fail.
-
-   <details>
-   <summary>Alternative: Create categories via API</summary>
-
-   ```bash
-   # Run on NAS (replace YOUR_API_KEY with actual key from SABnzbd Config → General)
-   docker exec sabnzbd curl -s 'http://localhost:8080/api?mode=set_config&section=categories&keyword=sonarr&apikey=YOUR_API_KEY'
-   docker exec sabnzbd curl -s 'http://localhost:8080/api?mode=set_config&section=categories&keyword=radarr&apikey=YOUR_API_KEY'
-   ```
-   </details>
-
-5. **Add Usenet indexer to Prowlarr** (next section):
+4. **Add Usenet indexer to Prowlarr** (next section):
    - NZBGeek ($12/year): https://nzbgeek.info
    - DrunkenSlug (free tier): https://drunkenslug.com
 
@@ -561,7 +545,7 @@ Skip this if you only want torrents. SABnzbd provides Usenet downloads as an alt
    - Host: `localhost` (SABnzbd also runs via gluetun)
    - Port: `8080`
    - API Key: (from SABnzbd Config → General)
-   - Category: `sonarr` (must exist in SABnzbd first)
+   - Category: `tv` (default category in SABnzbd)
 
 ### 5.5 Radarr (Movies)
 
@@ -580,7 +564,7 @@ Skip this if you only want torrents. SABnzbd provides Usenet downloads as an alt
    - Host: `localhost` (SABnzbd also runs via gluetun)
    - Port: `8080`
    - API Key: (from SABnzbd Config → General)
-   - Category: `radarr` (must exist in SABnzbd first)
+   - Category: `movies` (default category in SABnzbd)
 
 ### 5.6 Jellyfin (Media Server)
 

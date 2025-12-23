@@ -1,40 +1,64 @@
 # Updating the Stack
 
-Since the stack is deployed via git, updates are straightforward.
+Already running an earlier version? Pull the latest changes from git and redeploy.
 
-## Pull Latest Changes
+## Quick Update
 
-SSH into your NAS, then pull:
+SSH into your NAS:
 
 ```bash
 ssh your-username@nas-ip
 cd /volume1/docker/arr-stack  # or your deployment path
+
+# Pull changes and redeploy
 git pull origin main
+docker compose -f docker-compose.arr-stack.yml up -d --force-recreate
 ```
 
-## Redeploy Services
+> **Note:** Docker named volumes persist across restarts. All your service configurations (Sonarr settings, API keys, library data, etc.) are preserved.
 
-After pulling changes, redeploy to apply updates:
+## Update and Restart Container Images
 
-```bash
-# Stop services (Docker volumes are preserved - your configs are safe)
-docker compose -f docker-compose.arr-stack.yml down
-docker compose -f docker-compose.cloudflared.yml down
-docker compose -f docker-compose.traefik.yml down
-
-# Start in correct order
-docker compose -f docker-compose.traefik.yml up -d
-docker compose -f docker-compose.cloudflared.yml up -d
-docker compose -f docker-compose.arr-stack.yml up -d
-```
-
-## Update Container Images
-
-To pull the latest Docker images (Sonarr, Radarr, etc.):
+To pull the latest Docker images (Sonarr, Radarr, Jellyfin, etc.) and restart with them:
 
 ```bash
 docker compose -f docker-compose.arr-stack.yml pull
-docker compose -f docker-compose.arr-stack.yml up -d
+docker compose -f docker-compose.arr-stack.yml up -d  # Restarts containers using new images
 ```
 
-**Note:** Docker named volumes persist across `down`/`up` cycles. All your service configurations (Sonarr settings, API keys, library data, etc.) are preserved.
+---
+
+## Migration Notes
+
+When upgrading across versions, check below for any action required.
+
+### v1.1 → v1.2.x
+
+**Breaking changes:** None
+
+**New features (automatic):**
+- Startup order fixes — Gluetun now waits for Pi-hole to be healthy before connecting
+- Improved healthchecks — FlareSolverr tests Chrome, services auto-restart via deunhealth
+- Backup script improvements — smart space checking, 7-day rotation
+
+**New features (optional, requires setup):**
+
+| Feature | What it does | Setup |
+|---------|--------------|-------|
+| SABnzbd | Usenet downloads via VPN | Starts automatically (remove from compose if not wanted); configure in [SETUP.md](SETUP.md#usenet-sabnzbd) |
+| `.lan` domains | `http://sonarr.lan` etc, no ports | Router DHCP reservation + Pi-hole DNS, see [SETUP.md](SETUP.md#511-local-dns-lan-domains--optional) |
+| `MEDIA_ROOT` env var | Configurable media path | Add to `.env` if not using `/volume1/Media` |
+| deunhealth | Auto-restart crashed services | Deploy `docker-compose.utilities.yml` |
+
+**New .env variables:**
+
+| Variable | Required | Default | Purpose |
+|----------|----------|---------|---------|
+| `MEDIA_ROOT` | No | `/volume1/Media` | Base path for media storage |
+| `TRAEFIK_LAN_IP` | Only for .lan | — | Traefik's macvlan IP for local DNS |
+| `LAN_INTERFACE` | Only for .lan | — | Network interface (e.g., `eth0`) |
+| `LAN_SUBNET` | Only for .lan | — | Your LAN subnet (e.g., `10.10.0.0/24`) |
+| `LAN_GATEWAY` | Only for .lan | — | Router IP |
+| `TRAEFIK_LAN_MAC` | Only for .lan | — | Fixed MAC for DHCP reservation |
+
+See [.env.example](../.env.example) for all available variables.

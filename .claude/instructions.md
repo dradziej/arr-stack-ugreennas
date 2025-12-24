@@ -326,3 +326,10 @@ TRAEFIK_DASHBOARD_AUTH=admin:$2y$05$abc...
 WG_PASSWORD_HASH='$2a$12$abc...'
 TRAEFIK_DASHBOARD_AUTH='admin:$2y$05$abc...'
 ```
+
+## GitHub Releases
+
+When creating release notes:
+- Link to `docs/UPDATING.md` for upgrade instructions instead of inline steps
+- Keep notes concise - bullet points, not paragraphs
+- Don't mention Reddit/community feedback as motivation for changes

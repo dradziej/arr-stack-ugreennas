@@ -866,3 +866,9 @@ The *arr ecosystem includes other apps you can add using the same pattern:
 4. Redeploy: `docker compose -f docker-compose.arr-stack.yml up -d`
 
 </details>
+
+---
+
+## Further Reading
+
+- [TRaSH Guides](https://trash-guides.info/) — Quality profiles, naming conventions, and best practices for Sonarr, Radarr, and more

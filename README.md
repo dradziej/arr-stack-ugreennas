@@ -2,7 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/Pharkie/arr-stack-ugreennas)](https://github.com/Pharkie/arr-stack-ugreennas/releases)
 
-<img align="right" width="45%" hspace="20" vspace="10" src="docs/images/demo/demo.gif">
+<img align="right" width="45%" src="docs/images/demo/demo.gif">
 
 A Docker Compose stack for automated media management. Request a show or movie, it downloads and appears in Jellyfin—ready to watch, VPN-protected.
 

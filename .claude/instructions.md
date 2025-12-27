@@ -252,7 +252,10 @@ docker exec uptime-kuma sqlite3 /app/data/kuma.db "UPDATE monitor SET url='http:
 docker restart uptime-kuma
 ```
 
-**Add monitors** (must include `user_id=1`):
+**Add monitors:**
+
+**CRITICAL: Always include `user_id=1` - monitors without it won't appear in the UI!**
+
 ```bash
 docker exec uptime-kuma sqlite3 /app/data/kuma.db "INSERT INTO monitor (name, type, url, interval, accepted_statuscodes_json, ignore_tls, active, maxretries, user_id) VALUES ('Service Name', 'http', 'http://url', 60, '[\"200-299\"]', 0, 1, 3, 1);"
 docker restart uptime-kuma

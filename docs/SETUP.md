@@ -79,7 +79,7 @@ Before diving in, decide how you'll access your media stack:
 | **Cloudflared** | Tunnel to Cloudflare - secure remote access without port forwarding | + remote access |
 | **WireGuard** | VPN server - access your stack when away from home | + remote access |
 
-### Files To Edit For Your Setup
+### Files You Need To Edit
 
 **Core:**
 - `.env` - VPN credentials, NAS IP, media paths, PUID/PGID

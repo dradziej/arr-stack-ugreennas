@@ -81,7 +81,7 @@ Before diving in, decide how you'll access your media stack:
 
 ### What You'll Edit
 
-**All setups:**
+**Core:**
 - `.env` - VPN credentials, NAS IP, media paths, PUID/PGID
 
 **+ local DNS and above (if using Pi-hole):**

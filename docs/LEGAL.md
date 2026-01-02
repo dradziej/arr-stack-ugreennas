@@ -63,4 +63,4 @@ This repository contains only **configuration files for open-source software** -
 
 ---
 
-*This legal notice was last updated: December 2025*
+*This legal notice was last updated: January 2026*

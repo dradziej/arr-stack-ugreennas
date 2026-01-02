@@ -34,14 +34,14 @@ Works on Ugreen, Synology, QNAP, or any Docker host.
 
 Request: Jellyseerr → Sonarr/Radarr → Prowlarr
 Download: qBittorrent (torrents) or SABnzbd (Usenet) — both via VPN (Gluetun)
-Watch: Jellyfin (local) or via Traefik (remote)
+Watch: Jellyfin — locally or remotely via Traefik
 
 **Choose your setup:**
 | Setup | How you access | What you need |
 |-------|----------------|---------------|
 | **Core** | `192.168.1.50:8096` | Just the stack |
-| **+ local DNS** | `jellyfin.lan` | Add Pi-hole |
-| **+ remote access** | `jellyfin.yourdomain.com` | Add Traefik + Cloudflare Tunnel |
+| **+ local DNS** | `jellyfin.lan` | Add Pi-hole + Traefik |
+| **+ remote access** | `jellyfin.yourdomain.com` | Add Cloudflare Tunnel |
 
 ## Get Started
 

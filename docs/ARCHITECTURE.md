@@ -129,7 +129,7 @@ traefik-proxy network (172.20.0.0/24)
 
 | File | Purpose | Required for |
 |------|---------|--------------|
-| `docker-compose.arr-stack.yml` | Core media stack + VPN | All setups |
+| `docker-compose.arr-stack.yml` | Core media stack + VPN | Core |
 | `docker-compose.traefik.yml` | Reverse proxy for external access | + remote access |
 | `docker-compose.cloudflared.yml` | Tunnel to Cloudflare | + remote access |
 | `docker-compose.utilities.yml` | Monitoring, disk usage, auto-recovery | Optional |

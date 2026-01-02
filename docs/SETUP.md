@@ -67,13 +67,13 @@ Before diving in, decide how you'll access your media stack:
 
 | Component | What it does | Which setup? |
 |-----------|--------------|--------------|
-| **Gluetun** | VPN container - routes download traffic through VPN so your ISP can't see what you download | All |
-| **Jellyfin** | Media player - like Netflix but for your own content | All |
-| **Sonarr** | TV show monitor - watches for new episodes, sends to download | All |
-| **Radarr** | Movie monitor - watches for new movies, sends to download | All |
-| **Prowlarr** | Indexer manager - finds download sources for Sonarr/Radarr | All |
-| **qBittorrent** | Torrent client - downloads files (through VPN) | All |
-| **Jellyseerr** | Request portal - users request shows/movies here | All (recommended) |
+| **Gluetun** | VPN container - routes download traffic through VPN so your ISP can't see what you download | Core |
+| **Jellyfin** | Media player - like Netflix but for your own content | Core |
+| **Sonarr** | TV show monitor - watches for new episodes, sends to download | Core |
+| **Radarr** | Movie monitor - watches for new movies, sends to download | Core |
+| **Prowlarr** | Indexer manager - finds download sources for Sonarr/Radarr | Core |
+| **qBittorrent** | Torrent client - downloads files (through VPN) | Core |
+| **Jellyseerr** | Request portal - users request shows/movies here | Core (recommended) |
 | **Pi-hole** | DNS server - enables `.lan` domains, blocks ads | + local DNS |
 | **Traefik** | Reverse proxy - routes `yourdomain.com` to services, handles HTTPS | + remote access |
 | **Cloudflared** | Tunnel to Cloudflare - secure remote access without port forwarding | + remote access |
@@ -104,7 +104,7 @@ The stack is split into Docker Compose files so you can deploy only what you nee
 
 | File | Purpose | Which setup? |
 |------|---------|--------------|
-| `docker-compose.arr-stack.yml` | Core media stack (Jellyfin, *arr apps, downloads, VPN) | All |
+| `docker-compose.arr-stack.yml` | Core media stack (Jellyfin, *arr apps, downloads, VPN) | Core |
 | `docker-compose.traefik.yml` | Reverse proxy for external access | + remote access |
 | `docker-compose.cloudflared.yml` | Secure tunnel to Cloudflare (no port forwarding) | + remote access |
 | `docker-compose.utilities.yml` | Monitoring, auto-recovery, disk usage | Optional extras |

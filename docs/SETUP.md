@@ -8,7 +8,7 @@ Everything you need to go from zero to streaming. Works on any NAS or Docker hos
 - [Choose Your Setup](#choose-your-setup)
 - [Stack Overview](#stack-overview)
 - [Step 1: Create Directories](#step-1-create-directories-and-clonefork-repository)
-- [Step 2: Configure Settings](#step-2-configure-settings)
+- [Step 2: Edit Your Settings](#step-2-edit-your-settings)
 - [Step 3: Start the Stack](#step-3-start-the-stack)
 - [Step 4: Configure Each App](#step-4-configure-each-app)
 - [Step 5: Check It Works](#step-5-check-it-works)
@@ -257,7 +257,7 @@ sudo chmod 600 /path/to/arr-stack/traefik/acme.json
 
 ---
 
-## Step 2: Configure Settings
+## Step 2: Edit Your Settings
 
 > **Note:** From this point forward, all commands run **on your NAS via SSH**. If you closed your terminal, reconnect with `ssh your-username@nas-ip` and `cd /volume1/docker/arr-stack` (or your clone location). **UGOS users:** SSH may time out—re-enable in Control Panel → Terminal if needed.
 

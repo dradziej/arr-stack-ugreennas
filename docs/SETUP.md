@@ -304,15 +304,7 @@ id -u && id -g                # Run on NAS to check
 
 ### 2.4 Configure VPN
 
-**Why VPN for downloads?** Your ISP can see what you download via BitTorrent. A VPN encrypts this traffic and routes it through another server, so your ISP only sees "encrypted traffic to VPN provider".
-
-**Why only downloads?** Streaming (Jellyfin) doesn't need VPN protection—you're watching your own files. Running everything through VPN would slow down streaming unnecessarily.
-
-**How it works:** qBittorrent, Sonarr, Radarr, and Prowlarr all run "inside" the Gluetun container's network. Their internet traffic goes through the VPN tunnel automatically.
-
----
-
-Edit `.env` with your VPN credentials. Gluetun supports 30+ providers—find yours below:
+Add your VPN credentials to `.env`. Gluetun supports 30+ providers—find yours below:
 
 <details>
 <summary><strong>Surfshark (WireGuard)</strong></summary>

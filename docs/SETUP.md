@@ -494,7 +494,11 @@ SABnzbd provides Usenet downloads as an alternative/complement to qBittorrent.
 
 4. **Get API Key:** Config (⚙️) → General → Copy **API Key**
 
-5. **Add Usenet indexer to Prowlarr** (later step):
+5. **For + local DNS:** Add `sabnzbd.lan` to hostname whitelist:
+   - Config (⚙️) → Special → **host_whitelist** → add `sabnzbd.lan`
+   - Save, then restart SABnzbd container
+
+6. **Add Usenet indexer to Prowlarr** (later step):
    - NZBGeek ($12/year): https://nzbgeek.info
    - DrunkenSlug (free tier): https://drunkenslug.com
 

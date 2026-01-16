@@ -44,14 +44,17 @@ Here's what you'll need to get started.
 - VPN support (most NAS and Linux systems have this built-in)
 
 ### Software & Services
-- Docker Engine 20.10+ and Docker Compose v2.0+
-- Git (for deployment)
+- **Docker Engine 20.10+ and Docker Compose v2.0+** (see below - often preinstalled on NAS)
+- Git (for cloning this repo)
 - SSH access to your host
 - **VPN Subscription** - Any provider supported by [Gluetun](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) (Surfshark, NordVPN, PIA, Mullvad, ProtonVPN, etc.)
 
-> **Ugreen NAS:** Docker comes preinstalled - you don't need to install anything! Just install Git via SSH (shown in Step 1).
+> **NAS Users - Docker is probably already installed:**
+> - **Ugreen (UGOS):** Docker comes preinstalled - nothing to install!
+> - **Synology:** Install "Container Manager" from Package Center (one click)
+> - **QNAP:** Install "Container Station" from App Center (one click)
 >
-> **Synology / QNAP:** Install "Docker" or "Container Manager" from your NAS app store - it includes both Engine and Compose.
+> Just install Git via SSH (shown in Step 1) and you're ready to go.
 
 <details>
 <summary><strong>Already using Tailscale?</strong></summary>

@@ -38,10 +38,9 @@ Decide how you'll access your media stack:
 Here's what you'll need to get started.
 
 ### Hardware
-- Docker host (NAS, server, Raspberry Pi 4+, etc.)
+- **NAS** (Ugreen, Synology, QNAP, etc.) or any Linux server/Raspberry Pi 4+
 - Minimum 4GB RAM (8GB+ recommended)
 - Storage for media files
-- VPN support (most NAS and Linux systems have this built-in)
 
 ### Software & Services
 - **Docker Engine 20.10+ and Docker Compose v2.0+** (see below - often preinstalled on NAS)

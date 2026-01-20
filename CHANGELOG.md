@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 ## [1.5.3] - 2026-01-20
 
 ### Added
-- **Intel Quick Sync hardware transcoding**: GPU-accelerated video transcoding for Jellyfin on Intel NAS (Ugreen DXP4800+, etc.). Reduces CPU usage from ~80% to ~5% when transcoding.
+- **Intel Quick Sync hardware transcoding**: GPU-accelerated video transcoding for Jellyfin on Intel NAS (Ugreen DXP4800+, etc.). Reduces CPU usage from ~80% to ~20% when transcoding.
 
 ### Documentation
-- Hardware transcoding setup guide with screenshot of recommended Jellyfin settings
+- Hardware transcoding setup guide with Transcoding and Trickplay screenshots
+- Verification steps to confirm hardware acceleration is working
+- Fork recommended over clone in setup guide
 
 ---
 

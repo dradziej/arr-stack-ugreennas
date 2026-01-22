@@ -117,7 +117,6 @@ VOLUME_SUFFIXES=(
   sabnzbd-config          # Usenet provider credentials and settings
   prowlarr-config         # Indexer configs and API keys
   bazarr-config           # Subtitle provider credentials
-  wireguard-easy-config   # VPN peer configs - CRITICAL for remote access!
   uptime-kuma-data        # Monitor configurations
   pihole-etc-dnsmasq      # Custom DNS settings (small)
 )

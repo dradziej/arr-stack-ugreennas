@@ -38,7 +38,6 @@ check_domains() {
         "sabnzbd.lan"
         "traefik.lan"
         "pihole.lan"
-        "wg.lan"
         "uptime.lan"
         "duc.lan"
         "beszel.lan"
@@ -69,7 +68,6 @@ check_domains() {
         local external_domains=(
             "jellyfin.$domain"
             "jellyseerr.$domain"
-            "wg.$domain"
         )
 
         echo "    Checking external domains..."

@@ -72,11 +72,6 @@ http:
       entryPoints: [web]
       service: pihole-lan
 
-    wg-lan:
-      rule: "Host(`wg.lan`)"
-      entryPoints: [web]
-      service: wg-lan
-
     # === Utilities ===
     uptime-lan:
       rule: "Host(`uptime.lan`)"
@@ -149,11 +144,6 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.20.0.5:80"
-
-    wg-lan:
-      loadBalancer:
-        servers:
-          - url: "http://172.20.0.6:51821"
 
     # === Utilities ===
     uptime-lan:

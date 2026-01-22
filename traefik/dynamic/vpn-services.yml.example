@@ -31,12 +31,6 @@ http:
         - jellyseer-redirect-external
       service: jellyseerr
 
-    wg:
-      rule: "Host(`wg.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: wg
-
   middlewares:
     jellyseer-redirect-external:
       redirectRegex:
@@ -54,8 +48,3 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.20.0.8:5055"
-
-    wg:
-      loadBalancer:
-        servers:
-          - url: "http://172.20.0.6:51821"

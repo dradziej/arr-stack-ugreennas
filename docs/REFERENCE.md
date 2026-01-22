@@ -24,7 +24,6 @@
 | SABnzbd | `NAS_IP:8082` | `http://sabnzbd.lan` | — |
 | Pi-hole | `NAS_IP:8081/admin` | `http://pihole.lan/admin` | — |
 | Traefik | — | `http://traefik.lan` | — |
-| WireGuard | `NAS_IP:51821` | `http://wg.lan` | `https://wg.DOMAIN` |
 | Uptime Kuma | `NAS_IP:3001` | `http://uptime.lan` | — |
 | duc | `NAS_IP:8838` | `http://duc.lan` | — |
 | Beszel | `NAS_IP:8090` | `http://beszel.lan` | — |
@@ -46,7 +45,6 @@
 | ↳ Prowlarr | (via Gluetun) | 9696 | Indexer manager |
 | Jellyfin | 172.20.0.4 | 8096 | Media server |
 | Pi-hole | 172.20.0.5 | 8081 | DNS ad-blocking (`/admin`) |
-| WireGuard | 172.20.0.6 | 51820/udp | Remote VPN access |
 | Jellyseerr | 172.20.0.8 | 5055 | Request management |
 | Bazarr | 172.20.0.9 | 6767 | Subtitles |
 | FlareSolverr | 172.20.0.10 | 8191 | Cloudflare bypass |

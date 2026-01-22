@@ -32,12 +32,6 @@ http:
         - overseer-redirect-external
       service: overseerr
 
-    wg:
-      rule: "Host(`wg.yourdomain.com`)"
-      entryPoints:
-        - web
-      service: wg
-
   middlewares:
     overseer-redirect-external:
       redirectRegex:
@@ -55,8 +49,3 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.20.0.8:5055"
-
-    wg:
-      loadBalancer:
-        servers:
-          - url: "http://172.20.0.6:51821"

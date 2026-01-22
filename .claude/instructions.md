@@ -253,7 +253,6 @@ docker exec pihole pihole reloaddns
 | Pi-hole | v6 API uses password not separate token |
 | Gluetun | VPN gateway. Services using it share IP 172.20.0.3. Uses Pi-hole DNS. `FIREWALL_OUTBOUND_SUBNETS` must include LAN for HA access |
 | Cloudflared | SSL terminated at Cloudflare, Traefik receives HTTP |
-| wg-easy | Generate hash: `docker run --rm ghcr.io/wg-easy/wg-easy wgpw 'PASSWORD'` |
 | FlareSolverr | Cloudflare bypass for Prowlarr. Configure in Prowlarr: Settings → Indexers → add FlareSolverr with Host `flaresolverr.lan` |
 
 ## Container Updates
@@ -388,11 +387,9 @@ docker exec pihole pihole restartdns
 **Bcrypt hashes must be quoted** (they contain `$` which Docker interprets as variables):
 ```bash
 # Wrong
-WG_PASSWORD_HASH=$2a$12$abc...
 TRAEFIK_DASHBOARD_AUTH=admin:$2y$05$abc...
 
 # Correct
-WG_PASSWORD_HASH='$2a$12$abc...'
 TRAEFIK_DASHBOARD_AUTH='admin:$2y$05$abc...'
 ```
 

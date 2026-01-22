@@ -48,18 +48,6 @@ Here's what you'll need to get started.
 - **VPN Subscription** - Any provider supported by [Gluetun](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) (Surfshark, NordVPN, PIA, Mullvad, ProtonVPN, etc.)
 
 <details>
-<summary><strong>Already using Tailscale?</strong></summary>
-
-This stack has two different WireGuard components:
-
-- **Gluetun's WireGuard** = VPN *client* that protects your downloads. You need this regardless of Tailscale.
-- **WireGuard service** = VPN *server* for accessing your NAS remotely. Tailscale replaces this.
-
-If you use Tailscale: skip the WireGuard *service* (the `WG_PASSWORD_HASH` stuff in `.env`). You still need your VPN provider's WireGuard credentials for Gluetun.
-
-</details>
-
-<details>
 <summary><strong>New to Docker?</strong></summary>
 
 **Docker** runs applications in isolated "containers" - like lightweight virtual machines. Each service (Jellyfin, Sonarr, etc.) runs in its own container.
@@ -95,7 +83,6 @@ This stack uses Docker Compose because it has 10+ services that need to work tog
 | **qBittorrent** | Torrent client - downloads files (through VPN) | Core |
 | **Gluetun** | VPN container - routes download traffic through VPN so your ISP can't see what you download | Core |
 | **Pi-hole** | DNS server - blocks ads, provides Docker DNS | Core |
-| **WireGuard** | VPN server - full network access when away from home | + remote access |
 | **Traefik** | Reverse proxy - enables `.lan` domains | + local DNS |
 | **Cloudflared** | Tunnel to Cloudflare - secure remote access without port forwarding | + remote access |
 
@@ -108,7 +95,7 @@ This stack uses Docker Compose because it has 10+ services that need to work tog
 - `.env` - Add NAS IP, Pi-hole password, Traefik macvlan settings
 
 **+ remote access:**
-- `.env` - Add domain, WireGuard password, Traefik dashboard auth
+- `.env` - Add domain, Traefik dashboard auth
 - `traefik/dynamic/vpn-services.yml` - Replace `yourdomain.com`
 
 **Files you DON'T edit:**
@@ -334,19 +321,6 @@ Invent a password. Or, to generate a random one:
 openssl rand -base64 24
 ```
 Edit `.env`: `PIHOLE_UI_PASS=your_password`
-
-**For + remote access: WireGuard Password Hash**
-
-> **Note:** WireGuard uses `wg.${DOMAIN}` as its hostname. You need the + remote access setup (with DOMAIN configured) for WireGuard to work. See [WireGuard VPN Server Setup](#wireguard-vpn-server-setup) for full instructions.
-
-Invent a password for the WireGuard admin UI and note it down, then generate its hash:
-```bash
-docker run --rm ghcr.io/wg-easy/wg-easy wgpw 'your_chosen_password'
-```
-Copy the `$2a$12$...` hash output to `.env`:
-```bash
-WG_PASSWORD_HASH=$2a$12$your_generated_hash
-```
 
 **For + remote access: Traefik Dashboard Auth**
 
@@ -912,8 +886,6 @@ jellyfin:
   rule: "Host(`jellyfin.yourdomain.com`)"  # ← your domain
 jellyseerr:
   rule: "Host(`jellyseerr.yourdomain.com`)"  # ← your domain
-wg:
-  rule: "Host(`wg.yourdomain.com`)"  # ← your domain
 ```
 
 > **Note:** The `.yml` files are gitignored. Your customized configs won't be overwritten when you `git pull` updates.
@@ -950,67 +922,14 @@ From your phone on cellular data (not WiFi):
 - Visit `https://jellyfin.yourdomain.com`
 - Check SSL certificate is valid (padlock icon)
 
-### WireGuard VPN Server Setup
-
-WireGuard gives you full network access to your home from anywhere - not just HTTP services. Use it when you need to access admin UIs (Sonarr, Radarr, etc.) remotely, or want `.lan` domains on your phone.
-
-> **Cloudflare Tunnel vs WireGuard:**
-> - **Cloudflare Tunnel** = HTTP/HTTPS only, no port forwarding needed, good for Jellyfin/Jellyseerr
-> - **WireGuard** = Full network access, requires port forwarding, good for admin access
-
-**1. Port forward on your router:**
-
-WireGuard uses UDP (not HTTP), so it can't go through Cloudflare Tunnel. You must forward port 51820/udp on your router to your NAS IP.
-
-| Router | Where to find it |
-|--------|------------------|
-| MikroTik | IP → Firewall → NAT → Add (dstnat) |
-| UniFi | Settings → Firewall & Security → Port Forwarding |
-| pfSense | Firewall → NAT → Port Forward |
-| Most routers | "Port Forwarding" or "NAT" in settings |
-
-Settings: External port `51820`, Internal port `51820`, Protocol `UDP`, Internal IP = your NAS IP.
-
-<img align="right" width="45%" src="images/wireguard/Wireguard_newclient.png" alt="WireGuard UI - New Client">
-
-**2. Access WireGuard UI and create a client:**
-
-1. Open `http://wg.lan` (or `https://wg.yourdomain.com` if Cloudflare Tunnel is set up)
-2. Login with password from Step 2.5
-3. Click **"+ New Client"** to create a client (e.g., "iPhone")
-4. Click the QR code icon
-
-<br clear="right">
-
-<img align="right" width="25%" src="images/wireguard/Wireguard_ios1.png" alt="WireGuard iOS - Add Tunnel">
-
-**3. Install WireGuard on your phone:**
-
-1. Install WireGuard app ([iOS](https://apps.apple.com/app/wireguard/id1441195209) / [Android](https://play.google.com/store/apps/details?id=com.wireguard.android))
-2. Tap **+** → **Create from QR code**
-3. Scan the QR code from step 2
-4. Name it (e.g., "Home NAS")
-
-<br clear="right">
-
-**4. Test the connection:**
-
-1. **Disconnect from WiFi** (use cellular data)
-2. Enable the WireGuard VPN in the app
-3. Try accessing `http://sonarr.lan` - should work!
-4. Check the WireGuard app shows data transfer (rx/tx bytes increasing)
-
-> **Troubleshooting:** If `.lan` domains don't work but the VPN connects, check Pi-hole Settings → DNS → Interface settings → "Permit all origins" is selected.
-
 ---
 
 ## ✅ + remote access Complete!
 
 **Congratulations!** You now have:
 - Remote access from anywhere via `yourdomain.com` (Cloudflare Tunnel)
-- Full network VPN access via WireGuard (for admin UIs and `.lan` domains)
 - HTTPS encryption for all external traffic
-- No HTTP ports exposed on your router
+- No ports exposed on your router
 
 **You're done!** The sections below (Backup, Utilities) are optional but recommended.
 

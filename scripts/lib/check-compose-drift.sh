@@ -27,7 +27,7 @@ check_compose_drift() {
     fi
 
     # Check for common services that should have matching configs
-    local common_services=("gluetun" "qbittorrent" "sonarr" "radarr" "prowlarr" "pihole" "wg-easy" "bazarr" "flaresolverr")
+    local common_services=("gluetun" "qbittorrent" "sonarr" "radarr" "prowlarr" "pihole" "bazarr" "flaresolverr")
 
     for service in "${common_services[@]}"; do
         # Check if service exists in both

@@ -26,7 +26,6 @@ The backup script (`scripts/backup-volumes.sh`) backs up **essential configs onl
 | qbittorrent-config | ~9MB | Client settings, categories |
 | prowlarr-config | ~22MB | Indexer configs, API keys |
 | bazarr-config | ~2MB | Subtitle provider credentials |
-| wireguard-easy-config | ~8KB | VPN peer configs (critical!) |
 | uptime-kuma-data | ~14MB | Monitor configurations |
 | pihole-etc-dnsmasq | ~4KB | Custom DNS settings |
 | jellyseerr-config | ~5MB | User accounts, requests |

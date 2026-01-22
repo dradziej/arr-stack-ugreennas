@@ -89,7 +89,6 @@ arr-stack network (172.20.0.0/24)
 │ 172.20.0.9   │ Bazarr       │ Subtitles                      │ Core             │
 │ 172.20.0.10  │ FlareSolverr │ Cloudflare bypass              │ Core (optional)  │
 │ 172.20.0.5   │ Pi-hole      │ DNS server                     │ Core             │
-│ 172.20.0.6   │ WireGuard    │ VPN server (incoming)          │ Core             │
 │ 172.20.0.2   │ Traefik      │ Reverse proxy                  │ + local DNS      │
 │ 172.20.0.12  │ Cloudflared  │ Tunnel to Cloudflare           │ + remote access  │
 │ 172.20.0.13  │ Uptime Kuma  │ Monitoring                     │ Optional         │

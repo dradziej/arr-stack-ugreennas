@@ -17,8 +17,18 @@ http:
       entryPoints: [web]
       service: jellyfin-lan
 
+    plex-lan:
+      rule: "Host(`plex.lan`)"
+      entryPoints: [web]
+      service: plex-lan
+
     jellyseerr-lan:
       rule: "Host(`jellyseerr.lan`)"
+      entryPoints: [web]
+      service: jellyseerr-lan
+
+    overseerr-lan:
+      rule: "Host(`overseerr.lan`)"
       entryPoints: [web]
       service: jellyseerr-lan
 
@@ -72,6 +82,11 @@ http:
       entryPoints: [web]
       service: pihole-lan
 
+    adguard-lan:
+      rule: "Host(`adguard.lan`)"
+      entryPoints: [web]
+      service: adguard-lan
+
     # === Utilities ===
     uptime-lan:
       rule: "Host(`uptime.lan`)"
@@ -101,6 +116,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.20.0.4:8096"
+  
+    plex-lan:
+      loadBalancer:
+        servers:
+          - url: "http://172.20.0.4:32400"
 
     jellyseerr-lan:
       loadBalancer:
@@ -144,6 +164,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.20.0.5:80"
+    
+    adguard-lan:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.50.101:2020"
 
     # === Utilities ===
     uptime-lan:

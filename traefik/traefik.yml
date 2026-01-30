@@ -1,0 +1,48 @@
+# Traefik Static Configuration
+# https://doc.traefik.io/traefik/
+#
+# No edits required - just copy to traefik.yml
+
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+# API and Dashboard
+api:
+  dashboard: true
+  insecure: true
+
+# Entry Points
+entryPoints:
+  web:
+    address: ":80"
+    # HTTP only - Cloudflare Tunnel handles SSL for external access
+    # .lan domains use HTTP (no SSL needed for local traffic)
+
+# Providers
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: arr-stack
+    watch: true
+
+  file:
+    directory: /dynamic
+    watch: true
+
+# Logging
+log:
+  level: INFO
+  filePath: /var/log/traefik/traefik.log
+  format: common
+
+# Access Logs
+accessLog:
+  filePath: /var/log/traefik/access.log
+  format: common
+  bufferingSize: 100
+
+# Ping for healthcheck
+ping:
+  entryPoint: web

@@ -299,38 +299,38 @@ services:
   # Access: pihole.lan/admin | NAS_IP:8081/admin
   # For: Home Pro + Anywhere setups
   # ═══════════════════════════════════════════════════════════════════════════
-#  pihole:
-#    image: pihole/pihole:latest
-#    container_name: pihole
-#    ports:
-#      - "${NAS_IP}:53:53/tcp"
-#      - "${NAS_IP}:53:53/udp"
-#      - "8081:80"  # Web UI (local network access)
-#    networks:
-#      arr-stack:
-#        ipv4_address: 172.20.0.5
-#      vpn-net:
-#        ipv4_address: 10.8.1.200
-#    environment:
-#      - TZ=${TZ}
-#      - FTLCONF_webserver_api_password=${PIHOLE_UI_PASS}
-#      - FTLCONF_dns_listeningMode=all
-#    volumes:
-#      - pihole-etc-pihole:/etc/pihole
-#      - pihole-etc-dnsmasq:/etc/dnsmasq.d
-#      - ./pihole/02-local-dns.conf:/etc/dnsmasq.d/02-local-dns.conf:ro
-#    cap_add:
-#      - NET_ADMIN
-#      - SYS_NICE
-#      - SYS_TIME
-#    restart: always
-#    logging: *default-logging
-#    healthcheck:
-#      test: ["CMD", "dig", "@127.0.0.1", "-p", "53", "google.com", "+short"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 2
-#      start_period: 30s
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    ports:
+      - "${NAS_IP}:53:53/tcp"
+      - "${NAS_IP}:53:53/udp"
+      - "8081:80"  # Web UI (local network access)
+    networks:
+      arr-stack:
+        ipv4_address: 172.20.0.5
+      vpn-net:
+        ipv4_address: 10.8.1.200
+    environment:
+      - TZ=${TZ}
+      - FTLCONF_webserver_api_password=${PIHOLE_UI_PASS}
+      - FTLCONF_dns_listeningMode=all
+    volumes:
+      - pihole-etc-pihole:/etc/pihole
+      - pihole-etc-dnsmasq:/etc/dnsmasq.d
+      - ./pihole/02-local-dns.conf:/etc/dnsmasq.d/02-local-dns.conf:ro
+    cap_add:
+      - NET_ADMIN
+      - SYS_NICE
+      - SYS_TIME
+    restart: always
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD", "dig", "@127.0.0.1", "-p", "53", "google.com", "+short"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 30s
 
   # ═══════════════════════════════════════════════════════════════════════════
   # OVERSEERR - Request portal for Plex. Users request movies/shows here.
